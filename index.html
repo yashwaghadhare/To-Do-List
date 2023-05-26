@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="Boot/css/bootstrap.min.css">
+    <script src="Boot/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <script src="To-Do/script.js"></script>
+    <title>To-Do lists | yash-waghadhare</title>
+</head>
+
+<body class="bg-dark">
+
+    <!-- Navbar is here , here is navbar , navbar is navbar -->
+    <header class="p-3 text-bg-dark">
+        <div class="container">
+            <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+                <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap">
+                    <img src="imgs/todo.png" height="40px" width="40px" alt=""><strong class="fs-5">To-Do</strong>
+                </svg>
+                </a>
+                <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                    <li><a href="index.html" class="nav-link px-2 text-white">Home</a></li>
+                    <li><a href="https://www.instagram.com/_yashh.21/" class="nav-link px-2 text-white">Contact</a></li>
+                    <li><a href="https://yashwaghadhare.github.io/Personal_portfolio"
+                            class="nav-link px-2 text-white">Portfolio</a></li>
+                    <li><a href="https://yashwaghadhare.github.io/SnakkeGame/"
+                            class="nav-link px-2 text-white">PlayGame</a></li>
+                </ul>
+                <div class="text-end">
+                    <button type="button" class="btn btn-outline-light me-2">Login</button>
+                    <button type="button" class="btn btn-warning">Sign-up</button>
+                </div>
+            </div>
+        </div>
+        <div class="text-white">
+            <hr>
+        </div>
+    </header>
+
+    <!-- the main content is here ,  here is main content , content is content -->
+    <div class="container" style="height: 500px; width:100%;">
+        <div class="to-do-box">
+            <p>Add your To-Do list here..!!</p>
+            <form>
+                <div class="text-box">
+                    <input required="required" name="Title" id="title" type="text">
+                    <label for="title">Title</label>
+                </div>
+                <div class="text-box">
+                    <input required="required" name="description" id="description" type="text">
+                    <label for="description">Description</label>
+                </div>
+                <button class="a" id="add"><span></span><span></span><span></span><span></span>Add</button>
+                <button id="clear" class="btn btn-dark" style="margin-left: 50px;" onclick="clearStorage()">clear all</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="container" style="height: 600px; width:100%;">
+        <div class="card-container">
+            <div class="card">
+                <div class="img-content">
+                    <center>
+                        <h1 style="color:white;">See your hidden Items</h1>
+                        <img src="imgs/1479.gif" alt="">
+                    </center>
+                </div>
+                <div class="content">
+                    <table class="table text-white">
+                        <thead>
+                            <tr>
+                                <th scope="col">Num</th>
+                                <th scope="col">Title</th>
+                                <th scope="col">Desc</th>
+                                <th scope="col">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody">
+                            <tr>
+                                <th scope="row">1</th>
+                                <td>Mark</td>
+                                <td>Otto</td>
+                                <td>btndelete</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="container">
+        <footer class="py-3 my-4">
+            <ul class="nav justify-content-center border-bottom pb-3 mb-3">
+                <li><a href="index.html" class="nav-link px-2 text-white">Home</a></li>
+                <li><a href="https://www.instagram.com/_yashh.21/" class="nav-link px-2 text-white">Contact</a></li>
+                <li><a href="https://yashwaghadhare.github.io/Personal_portfolio"
+                        class="nav-link px-2 text-white">Portfolio</a></li>
+                <li><a href="https://yashwaghadhare.github.io/SnakkeGame/" class="nav-link px-2 text-white">PlayGame</a>
+                </li>
+            </ul>
+            <p class="text-center text-white">© 2023 yash-waghadhare</p>
+        </footer>
+    </div>
+
+    <script>
+        function getAndUpdate() {
+            console.log("Updating List...");
+            tit = document.getElementById('title').value;
+            desc = document.getElementById('description').value;
+            if (localStorage.getItem('itemsJson') == null) {
+                itemJsonArray = [];
+                itemJsonArray.push([tit, desc]);
+                localStorage.setItem('itemsJson', JSON.stringify(itemJsonArray))
+            }
+            else {
+                itemJsonArrayStr = localStorage.getItem('itemsJson')
+                itemJsonArray = JSON.parse(itemJsonArrayStr);
+                itemJsonArray.push([tit, desc]);
+                localStorage.setItem('itemsJson', JSON.stringify(itemJsonArray))
+            }
+            update();
+        }
+
+        function update() {
+            if (localStorage.getItem('itemsJson') == null) {
+                itemJsonArray = [];
+                localStorage.setItem('itemsJson', JSON.stringify(itemJsonArray))
+            }
+            else {
+                itemJsonArrayStr = localStorage.getItem('itemsJson')
+                itemJsonArray = JSON.parse(itemJsonArrayStr);
+            }
+            // Populate the table
+            let tableBody = document.getElementById("tableBody");
+            let str = "";
+            itemJsonArray.forEach((element, index) => {
+                str += `
+        <tr>
+        <th scope="row">${index + 1}</th>
+        <td>${element[0]}</td>
+        <td>${element[1]}</td> 
+        <td><button class="btn btn-sm btn-dark" onclick="deleted(${index})">Done</button></td> 
+        </tr>`;
+            });
+            tableBody.innerHTML = str;
+        }
+
+        add = document.getElementById("add");
+        add.addEventListener("click", getAndUpdate);
+        update();
+        function deleted(itemIndex) {
+            console.log("Delete", itemIndex);
+            itemJsonArrayStr = localStorage.getItem('itemsJson')
+            itemJsonArray = JSON.parse(itemJsonArrayStr);
+            // Delete itemIndex element from the array
+            itemJsonArray.splice(itemIndex, 1);
+            localStorage.setItem('itemsJson', JSON.stringify(itemJsonArray));
+            update();
+
+        }
+
+        function clearStorage() {
+            if (confirm("Do you really want to clear?")) {
+                console.log('Clearing the storage')
+                localStorage.clear();
+                update()
+            }
+        }
+    </script>
+
+</body>
+
+</html>
